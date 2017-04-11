@@ -1,4 +1,4 @@
-# Copyright 2016 Google Inc. All rights reserved.
+# Copyright 2016 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,15 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import webtest
+import os
+import webapp2
 
-import main
+html = """
+<form>
+<h2>Add a Food</h2>
+<input type="text" name="food">
+<button>Add</button>
+</form>
+"""
+
+class Handler(webapp2.RequestHandler):
+    def write(self, *a, **kw):
+        self.response.out.write(*a, **kw)
+
+class MainPage(Handler):
+    def get(self):
+        self.write("Hello, Udacity!!!")
 
 
-def test_get():
-    app = webtest.TestApp(main.app)
-
-    response = app.get('/')
-
-    assert response.status_int == 200
-    assert response.body == 'Hello, World!'
+app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
