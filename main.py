@@ -62,7 +62,7 @@ class MainPage(webapp2.RequestHandler):
             self.write_form("That doesn't look valid to me, friend.",
                            user_month, user_day, user_year)
         else:
-            self.response.out.write("Thanks! That's a totally valid day!")
+            self.redirect("/thanks")
             
 def escape_html(s):
     return cgi.escape(s, quote = True)
@@ -105,5 +105,9 @@ def valid_year(year):
             return(year)
     else:
         return None
+    
+class ThanksHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.out.write("Thanks! That's a totally valid day!")
 
-app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
+app = webapp2.WSGIApplication([('/', MainPage), ('/thanks', ThanksHandler)], debug=True)
