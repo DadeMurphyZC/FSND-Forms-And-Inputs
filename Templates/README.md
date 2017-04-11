@@ -1,2 +1,2 @@
-# FSND-Forms-And-Inputs
-Udacity FullStack Nanodegree - MultiUser Blog: Forms and Inputs
+# Templates
+Various Google App Engine Python template exercises
