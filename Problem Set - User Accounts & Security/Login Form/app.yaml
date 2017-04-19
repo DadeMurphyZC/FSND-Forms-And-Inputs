@@ -1,0 +1,14 @@
+application: main
+runtime: python27
+threadsafe: true
+
+handlers:
+- url: /stylesheets
+  
+- url: /.*
+  script: main.app
+
+
+libraries:
+- name: jinja2
+  version: latest
