@@ -13,9 +13,14 @@
 # limitations under the License.
 
 import os
+import re
+import random
+import hashlib
+import hmac
+from string import letters
+
 import jinja2
 import webapp2
-import re
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
