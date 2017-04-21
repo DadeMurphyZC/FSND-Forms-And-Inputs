@@ -7,19 +7,21 @@
 </head>
 
 <body>
-  <a href="/blog" class="main-title">
-    CS 253 Blog
-  </a>
+  
 
   <div class="login-area">
     {% if user %}
-      Welcome, {{user.name}}!   [<a href="/blog/newpost">new post</a>] [<a class="login-link" href="/logout">logout</a>]
+      <b>Welcome, {{user.name}}!</b>   [<a href="/blog/newpost"><b>new post</b></a>] [<a class="login-link" href="/logout">logout</a>]
     {% else %}
       <a class="login-link" href="/login">login</a>
       |
       <a class="login-link" href="/signup">signup</a>
     {% endif %}
   </div>
+    </br>
+    <a href="/blog" class="main-title">
+    CS 253 Blog
+  </a>
 
   <div id="content">
   {% block content %}
