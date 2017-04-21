@@ -9,6 +9,10 @@ body {
     color: #333;
 }
 
+a {
+    text-decoration: none;
+}
+
 .login-area {
     font-size: 13px;
     color: gray;
