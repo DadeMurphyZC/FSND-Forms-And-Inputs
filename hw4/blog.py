@@ -125,7 +125,8 @@ class Post(db.Model):
     content = db.TextProperty(required = True)
     created = db.DateTimeProperty(auto_now_add = True)
     last_modified = db.DateTimeProperty(auto_now = True)
-
+    created_by = db.StringProperty(required = True)
+    
     def render(self):
         self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
@@ -149,6 +150,7 @@ class PostPage(BlogHandler):
 class NewPost(BlogHandler):
     def get(self):
         if self.user:
+            created_by = self.user.name
             self.render("newpost.html")
         else:
             self.redirect("/login")
@@ -159,9 +161,10 @@ class NewPost(BlogHandler):
 
         subject = self.request.get('subject')
         content = self.request.get('content')
+        created_by = self.user.name
 
         if subject and content:
-            p = Post(parent = blog_key(), subject = subject, content = content)
+            p = Post(parent = blog_key(), subject = subject, content = content, created_by = created_by)
             p.put()
             self.redirect('/blog/%s' % str(p.key().id()))
         else:
