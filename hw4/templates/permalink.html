@@ -2,5 +2,8 @@
 
 {% block content %}
   {{post.render() | safe}}
+  <br>
+  <a href='/blog/{{post.key().id()}}/edit'>[edit]</a>
+  <a href='/blog/{{post.key().id()}}/delete'>[delete]</a>
 {% endblock %}
 test
