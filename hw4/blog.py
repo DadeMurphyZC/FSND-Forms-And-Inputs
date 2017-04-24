@@ -3,6 +3,7 @@ import re
 import random
 import hashlib
 import hmac
+import time
 from string import letters
 
 import webapp2
@@ -157,6 +158,33 @@ class EditPost(BlogHandler):
             return
 
         self.render("editpost.html", post = post)
+        
+    def post(self, post_id):
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
+        
+        if not self.user:
+            self.redirect('/blog')
+        post.subject = self.request.get('subject')
+        post.content = self.request.get('content')
+        post.user_id = self.user.name
+        
+        if post.subject and post.content:
+            post.put()
+            self.redirect('/blog/%s' % str(post.key().id()))
+        else:
+            error = "subject and content, please!"
+            self.render("newpost.html", subject=subject, content=content, error=error)
+            
+class DeletePost(BlogHandler):
+    def get(self, post_id):
+        if self.user:
+            
+            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+            post = db.get(key)
+            post.delete()
+            time.sleep(1)
+            self.redirect("/blog/")   
 
 class NewPost(BlogHandler):
     def get(self):
@@ -307,6 +335,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/?', BlogFront),
                                ('/blog/([0-9]+)', PostPage),
                                ('/blog/([0-9]+)/edit', EditPost),
+                               ('/blog/([0-9]+)/delete', DeletePost),
                                ('/blog/newpost', NewPost),
                                ('/signup', Register),
                                ('/login', Login),
