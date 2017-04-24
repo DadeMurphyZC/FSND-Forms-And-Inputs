@@ -147,6 +147,17 @@ class PostPage(BlogHandler):
 
         self.render("permalink.html", post = post)
 
+class EditPost(BlogHandler):
+    def get(self, post_id):
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
+
+        if not post:
+            self.error(404)
+            return
+
+        self.render("editpost.html", post = post)
+
 class NewPost(BlogHandler):
     def get(self):
         if self.user:
@@ -295,6 +306,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/unit2/welcome', Welcome),
                                ('/blog/?', BlogFront),
                                ('/blog/([0-9]+)', PostPage),
+                               ('/blog/([0-9]+)/edit', EditPost),
                                ('/blog/newpost', NewPost),
                                ('/signup', Register),
                                ('/login', Login),
