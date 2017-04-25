@@ -71,6 +71,19 @@ input[type=submit] {
   font-size: 24px;
 }
 
+
+a.cancel_button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+  
+  cursor: default;
+  padding: 3px;
+  font-size: 24px;
+  text-decoration: none;
+  color: initial;
+}
+
 .main-title {
     display: block;
     color: #222;
