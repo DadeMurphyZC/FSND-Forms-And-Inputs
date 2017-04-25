@@ -13,9 +13,9 @@
         <div>blog</div>
         <textarea name="content">{{post.content}}</textarea>
       </label>
-
       <div class="error">{{post.error}}</div>
 
       <input type="submit">
+      <a href='/blog/{{post.post_id}}' class="cancel_button">Cancel</a>
     </form>
 {% endblock %}
