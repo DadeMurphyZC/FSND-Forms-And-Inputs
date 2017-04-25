@@ -16,6 +16,6 @@
       <div class="error">{{post.error}}</div>
 
       <input type="submit">
-      <a href='/blog/{{post.post_id}}' class="cancel_button">Cancel</a>
+      <a href='/blog/{{post.key().id()}}' class="cancel_button">Cancel</a>
     </form>
 {% endblock %}
