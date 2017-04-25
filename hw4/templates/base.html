@@ -2,7 +2,7 @@
 <html>
 <head>
   <link type="text/css" rel="stylesheet" href="/static/main.css" />
-
+  <link href="https://fonts.googleapis.com/css?family=Anton|Roboto" rel="stylesheet">
   <title>CS 253 Blog</title>
 </head>
 
@@ -11,10 +11,9 @@
 
   <div class="login-area">
     {% if user %}
-      <b>Welcome, {{user.name}}!</b>   [<a href="/blog/newpost"><b>new post</b></a>] [<a class="login-link" href="/logout">logout</a>]
+      <b>Welcome, {{user.name}}!</b> <a href="/blog/newpost"><b>new post</b></a> <a href="/logout"><b>logout</b></a>
     {% else %}
       <a class="login-link" href="/login">login</a>
-      |
       <a class="login-link" href="/signup">signup</a>
     {% endif %}
   </div>
