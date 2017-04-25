@@ -21,9 +21,16 @@ a {
     right: 10px;
 }
 
+.login-area a {
+    color: gray;
+    margin: 5px;
+    text-decoration: none;
+}
+
 .login-link {
     color: gray;
     text-decoration: none;
+    margin-left: 0px;
 }
 
 .login-link:visited {
@@ -85,6 +92,7 @@ a.cancel_button {
 }
 
 .main-title {
+    font-family: 'Anton', sans-serif;
     display: block;
     color: #222;
     font-size: 40px;
@@ -99,6 +107,7 @@ a.cancel_button {
 }
 
 .post-heading {
+    font-family: 'Roboto', sans-serif;
     position: relative;
     border-bottom: 3px solid #666;
 }
@@ -117,6 +126,12 @@ a.cancel_button {
 }
 
 .post-content {
+    font-family: 'Roboto', sans-serif;
     margin-top: 5px;
+    font-weight: 400;
 }
 
+.post-details {
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+}
