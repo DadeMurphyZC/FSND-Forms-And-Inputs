@@ -1,5 +1,6 @@
 <div class="post">
-    <div class="post-details"><span> {{ p.post_likes }} likes</span> | <span>{{ p.post_views }} views</span> | <span>Division: MMA General</span></div>
+    <div class="post-details"><span> {{ p.post_likes }} {% if p.post_likes == 1 %} like {% else %} likes {% endif %}</span> | <span>{{ p.post_views }} {% if p.post_views == 1 %}
+        view {% else %} views {% endif %}</span></div>
     <div class="post-heading">
     <div class="post-title">
         <a href="/blog/{{p.key().id()}}">{{p.subject}}</a>
