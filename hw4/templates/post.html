@@ -1,6 +1,6 @@
 <div class="post">
-  <div class="post-details">Division: MMA General</div>
-  <div class="post-heading">
+    <div class="post-details"><span> {{ p.post_likes }} likes</span> | <span>{{ p.post_views }} views</span> | <span>Division: MMA General</span></div>
+    <div class="post-heading">
     <div class="post-title">
         <a href="/blog/{{p.key().id()}}">{{p.subject}}</a>
     </div>
@@ -9,9 +9,9 @@
 <!--        {{p.created.strftime("%b %d, %Y %I"+":"+"%M%p")}} by <a href=#>{{ p.user_id }}</a>-->
         {{p.created.strftime("%b %d, %Y")}} by <a href=#>{{ p.user_id }}</a>
     </div>
-  </div>
+    </div>
 
-  <div class="post-content">
-    {{p._render_text | safe}}
-  </div>
+    <div class="post-content">
+        {{p._render_text | safe}}
+    </div>
 </div>
