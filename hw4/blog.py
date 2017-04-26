@@ -128,6 +128,7 @@ class Post(db.Model):
     last_modified = db.DateTimeProperty(auto_now = True)
     user_id = db.StringProperty(required = True)
     post_likes = db.IntegerProperty(default=0, required=True)
+    post_views = db.IntegerProperty(default=0, required=True)
     
     def render(self):
         self._render_text = self.content.replace('\n', '<br>')
@@ -146,7 +147,8 @@ class PostPage(BlogHandler):
         if not post:
             self.error(404)
             return
-
+        post.post_views += 1
+        post.put()
         self.render("permalink.html", post = post)
 
 class EditPost(BlogHandler):
@@ -185,7 +187,17 @@ class DeletePost(BlogHandler):
             post = db.get(key)
             post.delete()
             time.sleep(1)
-            self.redirect("/blog/")   
+            self.redirect("/blog/") 
+            
+class LikePost(BlogHandler):
+    def get(self, post_id):
+        if self.user:
+            
+            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+            post = db.get(key)
+            post.post_likes += 1
+            post.put()
+            self.redirect('/blog/%s' % str(post.key().id()))
 
 class NewPost(BlogHandler):
     def get(self):
@@ -335,6 +347,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/unit2/welcome', Welcome),
                                ('/blog/?', BlogFront),
                                ('/blog/([0-9]+)', PostPage),
+                               ('/blog/([0-9]+)/like', LikePost),
                                ('/blog/([0-9]+)/edit', EditPost),
                                ('/blog/([0-9]+)/delete', DeletePost),
                                ('/blog/newpost', NewPost),
