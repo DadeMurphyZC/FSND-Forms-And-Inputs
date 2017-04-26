@@ -131,7 +131,7 @@ class Post(db.Model):
     post_views = db.IntegerProperty(default=0, required=True)
     
     def render(self):
-        self._render_text = self.content.replace('\n', '<br>')
+#        self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
     
 class BlogFront(BlogHandler):
