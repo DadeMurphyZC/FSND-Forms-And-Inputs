@@ -79,13 +79,7 @@ input[type=submit] {
 }
 
 
-a.cancel_button {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
-  
-  cursor: default;
-  padding: 3px;
+button {
   font-size: 24px;
   text-decoration: none;
   color: initial;
@@ -100,6 +94,13 @@ a.cancel_button {
     text-align: center;
     margin-bottom: 30px;
     text-decoration: none;
+}
+
+.editPostButton {
+    cursor: pointer;
+    border: 0px;
+    background: none;
+    padding: 0px;
 }
 
 .post + .post {
