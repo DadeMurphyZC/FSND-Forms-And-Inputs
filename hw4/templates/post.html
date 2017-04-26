@@ -12,6 +12,8 @@
     </div>
 
     <div class="post-content">
-        {{p._render_text | safe}}
+        {% for line in p.content.splitlines() %}
+            {{line}}<br>
+        {% endfor %}
     </div>
 </div>
