@@ -153,9 +153,15 @@ class PostPage(BlogHandler):
 
 class EditPost(BlogHandler):
     def get(self, post_id):
+        if not self.user:
+            self.redirect('/login')
+        
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
-
+        
+        if not self.user == post.user_id:
+            self.redirect('/blog/%s' % str(post.key().id()))
+        
         if not post:
             self.error(404)
             return
@@ -167,6 +173,8 @@ class EditPost(BlogHandler):
         post = db.get(key)
         
         if not self.user:
+            self.redirect('/blog')
+        if not self.user == post.user_id:
             self.redirect('/blog')
         post.subject = self.request.get('subject')
         post.content = self.request.get('content')
@@ -181,23 +189,28 @@ class EditPost(BlogHandler):
             
 class DeletePost(BlogHandler):
     def get(self, post_id):
-        if self.user:
+        if not self.user:
+            self.redirect('/login')
             
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
+        if self.user and self.user == post.user_id:
             post.delete()
             time.sleep(1)
             self.redirect("/blog/") 
-            
+        else:
+            self.redirect('/blog/%s' % str(post.key().id()))
+
 class LikePost(BlogHandler):
     def get(self, post_id):
         if self.user:
-            
             key = db.Key.from_path('Post', int(post_id), parent=blog_key())
             post = db.get(key)
             post.post_likes += 1
             post.put()
             self.redirect('/blog/%s' % str(post.key().id()))
+        else:
+            self.redirect('/login')
 
 class NewPost(BlogHandler):
     def get(self):
@@ -205,7 +218,7 @@ class NewPost(BlogHandler):
             user_id = self.user.name
             self.render("newpost.html")
         else:
-            self.redirect("/login")
+            self.redirect("/blog/login")
 
     def post(self):
         if not self.user:
