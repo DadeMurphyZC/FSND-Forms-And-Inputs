@@ -128,7 +128,9 @@ class Post(db.Model):
     last_modified = db.DateTimeProperty(auto_now = True)
     user_id = db.StringProperty(required = True)
     post_likes = db.IntegerProperty(default=0, required=True)
+    post_liked = db.ListProperty(str, default=None, required=True)
     post_views = db.IntegerProperty(default=0, required=True)
+    
     
     def render(self):
 #        self._render_text = self.content.replace('\n', '<br>')
@@ -152,21 +154,23 @@ class PostPage(BlogHandler):
         self.render("permalink.html", post = post)
 
 class EditPost(BlogHandler):
-    
     def get(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
-        if self.user.name == post.user_id:
+        if not self.user:
+            self.redirect('/blog/%s' % str(post.key().id()))
+        if (self.user and (self.user.name == post.user_id)):
             self.render("editpost.html", post = post)
         else:
-            self.redirect('/blog')
-        
+            self.redirect('/blog/%s' % str(post.key().id()))
+            
     def post(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
         
         if not self.user:
             self.redirect('/blog')
+            
         post.subject = self.request.get('subject')
         post.content = self.request.get('content')
         post.user_id = self.user.name
@@ -176,28 +180,38 @@ class EditPost(BlogHandler):
             self.redirect('/blog/%s' % str(post.key().id()))
         else:
             error = "subject and content, please!"
-            self.render("newpost.html", subject=subject, content=content, error=error)
+            self.render("editpost.html", subject=subject, content=content, error=error)
             
 class DeletePost(BlogHandler):
     def get(self, post_id):
-        if self.user:
-            
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
+        
+        if not self.user:
+            self.redirect('/blog/%s' % str(post.key().id()))
+        
+        if (self.user and (self.user.name == post.user_id)): 
             post.delete()
             time.sleep(1)
-            self.redirect("/blog/") 
+            self.redirect("/blog/")
+        else:
+            self.redirect('/blog/%s' % str(post.key().id()))
             
 class LikePost(BlogHandler):
     def get(self, post_id):
-        if self.user:
-            
-            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            post = db.get(key)
+        key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+        post = db.get(key)
+        
+        if self.user and (self.user.name == post.user_id):
+            self.redirect('/blog/%s' % str(post.key().id()))
+        elif self.user:
             post.post_likes += 1
+            post.post_liked.append(post.user_id)
             post.put()
             self.redirect('/blog/%s' % str(post.key().id()))
-
+        else:
+            self.redirect('/blog/%s' % str(post.key().id()))
+                
 class NewPost(BlogHandler):
     def get(self):
         if self.user:
