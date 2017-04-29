@@ -3,7 +3,7 @@
 {% block content %}
   {{post.render() | safe}}
   <br>
-{% if user.name %}
+{% if user.name and (user.name != post.user_id) %}
 <!--  <a href='/blog/{{post.key().id()}}/edit'><img src="/static/images/ic_thumb_up_black_24px.svg"></a>-->
   <button class="editPostButton" onclick="window.location.href='/blog/{{post.key().id()}}/like'"><img src="/static/images/ic_thumb_up_black_24px.svg"></button>
 
