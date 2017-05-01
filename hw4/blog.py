@@ -158,11 +158,12 @@ class EditPost(BlogHandler):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
         if not self.user:
-            self.redirect('/blog/%s' % str(post.key().id()))
+            self.redirect('/login')
+            
         if (self.user and (self.user.name == post.user_id)):
             self.render("editpost.html", post = post)
         else:
-            self.redirect('/blog/%s' % str(post.key().id()))
+            self.redirect('/login')
             
     def post(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
@@ -188,7 +189,7 @@ class DeletePost(BlogHandler):
         post = db.get(key)
         
         if not self.user:
-            self.redirect('/blog/%s' % str(post.key().id()))
+            self.redirect('/login')
         
         if (self.user and (self.user.name == post.user_id)): 
             post.delete()
@@ -210,7 +211,7 @@ class LikePost(BlogHandler):
             post.put()
             self.redirect('/blog/%s' % str(post.key().id()))
         else:
-            self.redirect('/blog/%s' % str(post.key().id()))
+            self.redirect('/login')
                 
 class NewPost(BlogHandler):
     def get(self):
