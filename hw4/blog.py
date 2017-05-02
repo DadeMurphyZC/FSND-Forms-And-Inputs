@@ -157,21 +157,19 @@ class EditPost(BlogHandler):
     def get(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
-        if not self.user:
-            self.redirect('/login')
             
         if (self.user and (self.user.name == post.user_id)):
             self.render("editpost.html", post = post)
+        elif self.user:
+            self.redirect('/blog/%s' % str(post.key().id()))
         else:
-            self.redirect('/login')
+            if not self.user:
+                self.redirect('/login')
             
     def post(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
-        
-        if not self.user:
-            self.redirect('/blog')
-            
+
         post.subject = self.request.get('subject')
         post.content = self.request.get('content')
         post.user_id = self.user.name
@@ -187,17 +185,17 @@ class DeletePost(BlogHandler):
     def get(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
         post = db.get(key)
-        
-        if not self.user:
-            self.redirect('/login')
-        
+
         if (self.user and (self.user.name == post.user_id)): 
             post.delete()
             time.sleep(1)
             self.redirect("/blog/")
-        else:
+        elif self.user:
             self.redirect('/blog/%s' % str(post.key().id()))
-            
+        else:
+            if not self.user:
+                self.redirect('/login')
+        
 class LikePost(BlogHandler):
     def get(self, post_id):
         key = db.Key.from_path('Post', int(post_id), parent=blog_key())
@@ -206,12 +204,18 @@ class LikePost(BlogHandler):
         if self.user and (self.user.name == post.user_id):
             self.redirect('/blog/%s' % str(post.key().id()))
         elif self.user:
-            post.post_likes += 1
-            post.post_liked.append(post.user_id)
-            post.put()
-            self.redirect('/blog/%s' % str(post.key().id()))
+            for n in post.post_liked:
+                if n == self.user.name:
+                    self.redirect('/blog/%s' % str(post.key().id()))
+                else:
+                    if n != self.user.name:
+                        post.post_likes += 1
+                        post.post_liked.append(post.user_id)
+                        post.put()
+                        self.redirect('/blog/%s' % str(post.key().id()))
         else:
-            self.redirect('/login')
+            if not self.user:
+                self.redirect('/login')
                 
 class NewPost(BlogHandler):
     def get(self):
