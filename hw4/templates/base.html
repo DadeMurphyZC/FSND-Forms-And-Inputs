@@ -2,8 +2,9 @@
 <html>
 <head>
   <link type="text/css" rel="stylesheet" href="/static/main.css" />
+  <link type="text/css" rel="stylesheet" href="/static/bootstrap.css" />
   <link href="https://fonts.googleapis.com/css?family=Anton|Roboto" rel="stylesheet">
-  <title>CS 253 Blog</title>
+  <title>Udacity Multi User Blog</title>
 </head>
 
 <body>
@@ -18,14 +19,16 @@
     {% endif %}
   </div>
     </br>
+  <div class="centered">
     <a href="/blog" class="main-title">
-    CS 253 Blog
-  </a>
+    Udacity Multi User Blog
+    </a>
 
   <div id="content">
   {% block content %}
   {% endblock %}
   </div>
+</div>
 </body>
 
 </html>
