@@ -213,16 +213,14 @@ class LikePost(BlogHandler):
         
         if self.user and (self.user.name == post.user_id):
             self.redirect('/blog/%s' % str(post.key().id()))
-        elif self.user:
-            for n in post.post_liked:
-                if n == self.user.name:
-                    self.redirect('/blog/%s' % str(post.key().id()))
-                else:
-                    if n != self.user.name:
-                        post.post_likes += 1
-                        post.post_liked.append(post.user_id)
-                        post.put()
-                        self.redirect('/blog/%s' % str(post.key().id()))
+        elif self.user and (self.user.name != post.user_id):
+            if self.user.name not in post.post_liked:
+                post.post_likes += 1
+                post.post_liked.append(self.user.name)
+                post.put()
+                self.redirect('/blog/%s' % str(post.key().id()))
+            else:
+                self.redirect('/blog/%s' % str(post.key().id()))
         else:
             if not self.user:
                 self.redirect('/login')
