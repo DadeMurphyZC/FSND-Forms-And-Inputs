@@ -135,7 +135,17 @@ class Post(db.Model):
     def render(self):
 #        self._render_text = self.content.replace('\n', '<br>')
         return render_str("post.html", p = self)
-    
+
+class Comment(db.Model):
+    post = db.ReferenceProperty(Post,
+                               collection_name='posts')
+    comment_author = db.StringProperty(required = True)
+    comment_content = db.TextProperty(required = True)
+    comment_created = db.DateTimeProperty(auto_now_add = True)
+    comment_last_modified = db.DateTimeProperty(auto_now = True)
+    comment_likes = db.IntegerProperty(default=0, required=True)
+
+
 class BlogFront(BlogHandler):
     def get(self):
         posts = greetings = Post.all().order('-created')
@@ -241,6 +251,13 @@ class NewPost(BlogHandler):
             error = "subject and content, please!"
             self.render("newpost.html", subject=subject, content=content, error=error)
 
+class NewComment(BlogHandler):
+    def get(self):
+        if self.user:
+            user_id = self.user.name
+            self.render("comment.html")
+        else:
+            self.redirect("/login")
 
 ###### Unit 2 HW's
 class Rot13(BlogHandler):
@@ -369,6 +386,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/([0-9]+)/edit', EditPost),
                                ('/blog/([0-9]+)/delete', DeletePost),
                                ('/blog/newpost', NewPost),
+                               ('/blog/comment', NewComment),
                                ('/signup', Register),
                                ('/login', Login),
                                ('/logout', Logout),
