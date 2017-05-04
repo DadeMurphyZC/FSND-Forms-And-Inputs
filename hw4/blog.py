@@ -252,12 +252,26 @@ class NewPost(BlogHandler):
             self.render("newpost.html", subject=subject, content=content, error=error)
 
 class NewComment(BlogHandler):
-    def get(self):
+    def get(self, post_id):
         if self.user:
             user_id = self.user.name
             self.render("comment.html")
         else:
-            self.redirect("/login")
+            if self.user:
+                self.redirect("/login")
+                
+    def post(self, post_id):
+        if not self.user:
+            self.redirect('/blog')
+            
+        comment_content = self.request.get('comment_content')
+        comment_author = self.user.name
+        
+        if comment_content:
+            key = db.Key.from_path('Post', int(post_id), parent=blog_key())
+            p = Comment(parent = key, comment_content = comment_content, comment_author = comment_author)
+            p.put()
+            self.redirect('/blog/%s' % post_id)
 
 ###### Unit 2 HW's
 class Rot13(BlogHandler):
@@ -386,7 +400,7 @@ app = webapp2.WSGIApplication([('/', MainPage),
                                ('/blog/([0-9]+)/edit', EditPost),
                                ('/blog/([0-9]+)/delete', DeletePost),
                                ('/blog/newpost', NewPost),
-                               ('/blog/comment', NewComment),
+                               ('/blog/([0-9]+)/comment', NewComment),
                                ('/signup', Register),
                                ('/login', Login),
                                ('/logout', Logout),
