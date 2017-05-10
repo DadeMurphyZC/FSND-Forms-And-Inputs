@@ -93,7 +93,7 @@ button {
     font-size: 40px;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     text-decoration: none;
 }
 
@@ -105,7 +105,12 @@ button {
 }
 
 .post + .post {
-    margin-top: 15px;
+
+}
+
+.post {
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .post-heading {
