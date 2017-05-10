@@ -137,14 +137,12 @@ class Post(db.Model):
         return render_str("post.html", p = self)
 
 class Comment(db.Model):
-    post = db.ReferenceProperty(Post,
-                               collection_name='posts')
+    post = db.StringProperty()
     comment_author = db.StringProperty(required = True)
     comment_content = db.TextProperty(required = True)
     comment_created = db.DateTimeProperty(auto_now_add = True)
     comment_last_modified = db.DateTimeProperty(auto_now = True)
     comment_likes = db.IntegerProperty(default=0, required=True)
-
 
 class BlogFront(BlogHandler):
     def get(self):
@@ -161,7 +159,8 @@ class PostPage(BlogHandler):
             return
         post.post_views += 1
         post.put()
-        self.render("permalink.html", post = post)
+        comments = Comment.all().filter('post =', str(post_id))
+        self.render("permalink.html", post = post, comments = comments)
 
 class EditPost(BlogHandler):
     def get(self, post_id):
@@ -267,7 +266,7 @@ class NewComment(BlogHandler):
         
         if comment_content:
             key = db.Key.from_path('Post', int(post_id), parent=blog_key())
-            p = Comment(parent = key, comment_content = comment_content, comment_author = comment_author)
+            p = Comment(parent = key, comment_content = comment_content, comment_author = comment_author, post = post_id)
             p.put()
             self.redirect('/blog/%s' % post_id)
 
