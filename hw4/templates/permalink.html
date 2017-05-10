@@ -15,5 +15,10 @@
 <!--  <a href='/blog/{{post.key().id()}}/delete'><img src="/static/images/ic_delete_forever_black_24px.svg"></a>-->
 {% endif %}
 <h2>Comments</h2>
+  {% for c in comments %}
+    <div>
+      {{ c.comment_content }}
+    </div>
+  {% endfor %}
 {% endblock %}
 
