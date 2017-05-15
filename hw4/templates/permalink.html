@@ -8,7 +8,7 @@
   <button class="editPostButton" onclick="window.location.href='/blog/{{post.key().id()}}/like'"><img src="/static/images/ic_thumb_up_black_24px.svg"></button>
 
 {% endif %}
-{% if user.name == post.user_id %}
+{% if user.name and (user.name == post.user_id) %}
   <button class="editPostButton" onclick="window.location.href='/blog/{{post.key().id()}}/edit'"><img src="/static/images/ic_mode_edit_black_24px.svg"></button>
   <button class="editPostButton" onclick="window.location.href='/blog/{{post.key().id()}}/delete'"><img src="/static/images/ic_delete_forever_black_24px.svg"></button>
 <!--  <a href='/blog/{{post.key().id()}}/edit'><img src="/static/images/ic_mode_edit_black_24px.svg"></a>-->
@@ -16,8 +16,22 @@
 {% endif %}
 <h2>Comments</h2>
   {% for c in comments %}
-    <div>
+    <div class="comment">
+    <div class="comment-date">
+      <span class="comment-likes">{{c.comment_likes}} likes 
+          {% if user.name and (user.name != c.comment_author) %}
+          <button class="editPostButton" onclick=""><img src="/static/images/ic_thumb_up_black_18px.svg"></button> 
+          <button class="editPostButton" onclick=""><img src="/static/images/ic_thumb_down_black_18px.svg"></button></span>
+          {% endif %}
+          {% if user.name and (user.name == c.comment_author) %}
+          <button class="editPostButton" onclick=""><img src="/static/images/ic_mode_edit_black_18px.svg"></button> 
+          <button class="editPostButton" onclick=""><img src="/static/images/ic_delete_forever_black_18px.svg"></button></span>
+          {% endif %}
+      <span class="comment-author">by {{ c.comment_author }}</span>
+    </div>
+    <div class="comment-content">
       {{ c.comment_content }}
+    </div>
     </div>
   {% endfor %}
 {% endblock %}
