@@ -129,7 +129,6 @@ button {
     right: 0px;
     bottom: 0px;
     color: #999;
-
 }
 
 .post-content {
@@ -142,3 +141,25 @@ button {
     font-family: 'Roboto', sans-serif;
     font-size: 12px;
 }
+
+.comment {
+    padding: 5px 10px 10px 5px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.19);
+    margin-bottom: 5px;
+    border-width: thin;
+}
+
+.comment-votes {
+    float: left;
+}
+
+.comment-date {
+    text-align: left;
+    bottom: 0px;
+    color: #999;
+}
+
+.comment-author {
+    float: right;
+}
+
